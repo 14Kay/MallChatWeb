@@ -15,7 +15,6 @@ export const useUserStore = defineStore('user', () => {
   }
 
   // 从 local读取
-  // console.count('trigger how many times')
   if (!Object.keys(userInfo.value).length && Object.keys(localUserInfo).length) {
     userInfo.value = localUserInfo
   }
@@ -26,6 +25,11 @@ export const useUserStore = defineStore('user', () => {
       .send()
       .then((data) => {
         userInfo.value = { ...userInfo.value, ...data }
+      })
+      .catch(() => {
+        // 删除缓存
+        localStorage.removeItem('TOKEN')
+        localStorage.removeItem('USER_INFO')
       })
   }
 
